@@ -1,4 +1,5 @@
 import { Axis } from './axis.js'
+import { setAttributes } from '../utils.js'
 
 export class YAxis extends Axis {
   constructor(element) {
@@ -6,10 +7,12 @@ export class YAxis extends Axis {
   }
 
   draw() {
-    this._line.setAttribute('x1', 0)
-    this._line.setAttribute('y1', this._height)
-    this._line.setAttribute('x2', 0)
-    this._line.setAttribute('y2', 0)
+    setAttributes(this._line, {
+      x1: 0,
+      y1: this._height,
+      x2: 0,
+      y2: 0
+    })
   }
 }
 
