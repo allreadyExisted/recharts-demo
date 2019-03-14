@@ -3,18 +3,11 @@ import { Chart } from './chart.js'
 
 fetchAsync('/data/chart_data.json').then(data => {
   const wrapper = document.getElementById('js-charts')
-  data.forEach(chartData => {
+  data.forEach(chartItemData => {
     const element = document.createElement('div')
-    element.className = 'chart'
+    element.className = 'tchart-wrapper'
     wrapper.appendChild(element)
-    const chart = new Chart({
-      element,
-      opts: {
-        data: [
-          ...chartData.columns
-        ]
-      }
-    })
+    const chart = new Chart(element, { data: chartItemData })
     
     chart.draw()
   })
