@@ -10,18 +10,33 @@ export const setAttributes = (el, attrs) => {
 }
 
 export const normalizeData = data => {
-  const yAxesKeys = Object.keys(data.names)
-  const yMax = data.columns
-    .filter(item => !item[0].startsWith('x'))
-    .reduce((prev, curr) => Math.max(prev, ...curr.slice(1)), 0)
   const xAxisData = (data.columns.find(item => item[0] === 'x') || []).slice(1)
+  const yAxesData = {}
+  const yMin = []
+  const yMax = []
+  
+  data.columns.forEach(item => {
+    if (!item[0].startsWith('x')) {
+      const name = item[0]
+      const axisData = item.slice(1)
+      yMin.push(Math.min(...axisData)) 
+      yMax.push(Math.max(...axisData))
+      yAxesData[name] = {
+        type: data.types[name],
+        name,
+        color: data.colors[name],
+        data: axisData
+      }
+    }
+  })
 
-  return yAxesKeys.map(name => ({
-    xAxisData,
-    yAxisData: data.columns.find(item => item[0] === name).slice(1),
-    yAxisType: data.types[name],
-    yAxisName: data.names[name],
-    yAxisColor: data.colors[name],
-    yMax
-  }))
+  return {
+    x: {
+      data: xAxisData
+    },
+    y: {
+      domain: [Math.min(...yMin), Math.max(...yMax)],
+      datasets: Object.keys(data.names).map(name => yAxesData[name])
+    }
+  }
 }

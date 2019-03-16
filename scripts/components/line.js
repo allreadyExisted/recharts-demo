@@ -5,7 +5,7 @@ const defaultOpts = {
   data: {
     x: [],
     y: [],
-    yMax: 0
+    domain: [0, 0]
   }
 }
 
@@ -47,18 +47,16 @@ export class Line {
   }
 
   _createPath() {
-    const { x, y, yMax } = this._data
+    const { x, y, domain: [_, yMax] } = this._data
     const { width, height } = this._element.getBoundingClientRect()
     const xPerc = width / x.length
     const yPerc = height / yMax
-    let d = `M0,${yPerc * y[0]}`
+    let d = ''
 
-    x.forEach((_, item) => {
-      const index = item + 1
-      if (index <= x.length - 1) {
-        d += `L${xPerc * index},${yPerc * y[index]}`
-      }
-    })
+    x.forEach((_, index) => d += index === 0
+      ? `M0,${yPerc * y[index]}`
+      : `L${xPerc * index},${yPerc * y[index]}`
+    )
 
     return d
   }

@@ -19,18 +19,21 @@ export class Chart {
     })
 
     this._element.appendChild(this._svg)
-
+    
+    const { x, y } = normalizeData(opts.data)
     this._xAxis = new XAxis(this._svg)
     this._yAxis = new YAxis(this._svg)
-    this._lines = normalizeData(opts.data)
-      .map(item => new Line(this._svg, {
-        color: item.yAxisColor,
+    this._lines = y.datasets.map(item => new Line(
+      this._svg,
+      {
+        color: item.color,
         data: {
-          x: item.xAxisData,
-          y: item.yAxisData,
-          yMax: item.yMax
+          x: x.data,
+          y: item.data,
+          domain: y.domain
         }
-      }))
+      }
+    ))
   }
 
   draw() {
