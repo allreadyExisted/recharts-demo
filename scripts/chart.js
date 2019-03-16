@@ -8,7 +8,6 @@ export class Chart {
     this._element = element
     this._data = opts.data
     this._svg = createElement('svg')
-    this._g = createElement('g')
 
     const { width, height } = this._element.getBoundingClientRect()
 
@@ -19,7 +18,6 @@ export class Chart {
       viewBox: `0 0 ${width} ${height}`
     })
 
-    this._svg.appendChild(this._g)
     this._element.appendChild(this._svg)
 
     this._xAxis = new XAxis(this._svg)

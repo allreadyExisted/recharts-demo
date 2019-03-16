@@ -17,10 +17,10 @@ export class Line {
     }
     this._data = data
     this._element = element
-    const group = createElement('g')
+    this._group = createElement('g')
     this._path = createElement('path')
 
-    setAttributes(group, {
+    setAttributes(this._group, {
       class: 'tchart-cartesian-line'
     })
 
@@ -30,11 +30,17 @@ export class Line {
       strokeWidth: '2px'
     })
     
-    group.appendChild(this._path)
-    element.appendChild(group)
+    this._group.appendChild(this._path)
+    element.appendChild(this._group)
   }
 
   draw() {
+    const { height } = this._element.getBoundingClientRect()
+
+    setAttributes(this._group, {
+      transform: `matrix(1 0 0 -1 0 ${height})`
+    })
+
     setAttributes(this._path, {
       d: this._createPath()
     })
@@ -45,12 +51,12 @@ export class Line {
     const { width, height } = this._element.getBoundingClientRect()
     const xPerc = width / x.length
     const yPerc = height / yMax
-    let d = `M0,${height - yPerc * y[0]}`
+    let d = `M0,${yPerc * y[0]}`
 
     x.forEach((_, item) => {
       const index = item + 1
       if (index <= x.length - 1) {
-        d += `L${xPerc * index},${height - yPerc * y[index]}`
+        d += `L${xPerc * index},${yPerc * y[index]}`
       }
     })
 
