@@ -5,9 +5,12 @@ fetchAsync('/data/chart_data.json').then(data => {
   const wrapper = document.getElementById('js-charts')
   data.forEach(chartItemData => {
     const element = document.createElement('div')
-    element.className = 'tchart-wrapper'
+    const chartWrapper = document.createElement('div')
+    element.className = 'wrapper-item'
+    chartWrapper.className = 'tchart-wrapper'
+    element.appendChild(chartWrapper)
     wrapper.appendChild(element)
-    const chart = new Chart(element, { data: chartItemData })
+    const chart = new Chart(chartWrapper, { data: chartItemData })
     
     chart.draw()
   })

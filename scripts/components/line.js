@@ -35,12 +35,6 @@ export class Line {
   }
 
   draw() {
-    const { height } = this._element.getBoundingClientRect()
-
-    setAttributes(this._group, {
-      transform: `matrix(1 0 0 -1 0 ${height})`
-    })
-
     setAttributes(this._path, {
       d: this._createPath()
     })
@@ -48,14 +42,15 @@ export class Line {
 
   _createPath() {
     const { x, y, domain: [_, yMax] } = this._data
-    const { width, height } = this._element.getBoundingClientRect()
+    const { width, height: h } = this._element.getBoundingClientRect()
+    const height = h * .95
     const xPerc = width / x.length
     const yPerc = height / yMax
     let d = ''
 
     x.forEach((_, index) => d += index === 0
-      ? `M0,${yPerc * y[index]}`
-      : `L${xPerc * index},${yPerc * y[index]}`
+      ? `M0,${height - yPerc * y[index]}`
+      : `L${xPerc * index},${height - yPerc * y[index]}`
     )
 
     return d

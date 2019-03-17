@@ -9,6 +9,14 @@ export const setAttributes = (el, attrs) => {
     el.setAttribute(key, attrs[key])
 }
 
+export const flipCoordinateSystem = (parent, child) => {
+  const { height } = parent.getBoundingClientRect()
+
+  setAttributes(child, {
+    transform: `matrix(1 0 0 -1 0 ${height})`
+  })
+}
+
 export const normalizeData = data => {
   const xAxisData = (data.columns.find(item => item[0] === 'x') || []).slice(1)
   const yAxesData = {}
@@ -30,13 +38,36 @@ export const normalizeData = data => {
     }
   })
 
+  const yAxisMax = Math.max(...yMax)
+  const depth = Math.floor(Math.log10(yAxisMax) + 1) - 1
+  const pow = Math.pow(10, depth)
+  const max = Math.ceil(yAxisMax / pow) * pow
+
   return {
     x: {
       data: xAxisData
     },
     y: {
-      domain: [Math.min(...yMin), Math.max(...yMax)],
+      domain: [Math.min(...yMin), max],
       datasets: Object.keys(data.names).map(name => yAxesData[name])
     }
   }
 }
+
+const COUNT_TICKS = 5
+
+export const getTicks = (axisMax, height) =>
+  new Array(COUNT_TICKS + 1)
+    .fill(0)
+    .map((_, index) => {
+      const value = axisMax - (axisMax / COUNT_TICKS) * index
+      const axisPerc = height / axisMax
+
+      return {
+        position: height - axisPerc  * value,
+        value
+      }
+    })
+
+export const AXIS_HEIGHT = .95
+export const TIKS_HEIGHT = .9

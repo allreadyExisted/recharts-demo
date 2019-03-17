@@ -32,11 +32,17 @@ const createAxis = (element, axisName, opts = {}) => {
 
 export class Axis {
   constructor(element, axisName) {
-    const { line } = createAxis(element, axisName)
+    const { line, ticks } = createAxis(element, axisName)
     const { width, height } = element.getBoundingClientRect()
     this._line = line
+    this._ticks = ticks
     this._width = width
     this._height = height
+  }
+
+  datum(data) {
+    this._data = data
+    return this
   }
 }
 

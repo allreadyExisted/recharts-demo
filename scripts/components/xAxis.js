@@ -1,5 +1,5 @@
 import { Axis } from './axis.js'
-import { setAttributes } from '../utils.js'
+import { setAttributes, AXIS_HEIGHT } from '../utils.js'
 
 export class XAxis extends Axis {
   constructor(element) {
@@ -7,11 +7,12 @@ export class XAxis extends Axis {
   }
 
   draw() {
+    const height = this._height * AXIS_HEIGHT
     setAttributes(this._line, {
       x1: 0,
-      y1: this._height,
+      y1: height,
       x2: this._width,
-      y2: this._height
+      y2: height
     })
   }
 }
